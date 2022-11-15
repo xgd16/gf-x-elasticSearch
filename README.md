@@ -7,19 +7,19 @@
 	_, err = data.SendRequest(data.ElasticSearchRequest[esapi.IndexRequest]{
 		Request: esapi.IndexRequest{
 			Index:      "testx",
-			DocumentID: "8615339249386",
+			DocumentID: "861533#######",
 			Refresh:    "true",
 		},
 		Body:         map[string]any{"a": 1, "b": 2, "c": 4},
 		JsonCallBack: data.IndexRequestJsonCallBack,
 	}.Create())
 	
-	fmt.Println(err)
-    // 获取
+	fmt.Println(err) 
+	// 获取
 	data, err := data.SendRequest(data.ElasticSearchRequest[esapi.GetRequest]{
 		Request: esapi.GetRequest{
 			Index:      "testx",
-			DocumentID: "8615339249386",
+			DocumentID: "861533#######",
 		},
 	}.Create())
 	
