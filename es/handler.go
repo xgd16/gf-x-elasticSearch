@@ -99,7 +99,7 @@ func SendRequest[T esapi.Request](ESRequest *ElasticSearchRequest[T]) (*gjson.Js
 	}
 	// 判断是否请求错误
 	if res.IsError() {
-		return nil, errors.New("请求失败")
+		return nil, errors.New("请求失败: " + res.String())
 	}
 	// 转换为string
 	buf := new(bytes.Buffer)
