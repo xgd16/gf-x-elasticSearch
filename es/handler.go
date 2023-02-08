@@ -3,6 +3,7 @@ package es
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -119,4 +120,52 @@ func SendRequest[T esapi.Request](ESRequest *ElasticSearchRequest[T]) (*gjson.Js
 	}
 
 	return jsonData, nil
+}
+
+// UpdateRequest 更新数据请求
+func UpdateRequest(index string, query, upData g.Map, upRule ...g.MapStrStr) error {
+	var upRuleStr string
+
+	setRule := func(r string) {
+		if upRuleStr == "" {
+			upRuleStr = r
+		} else {
+			upRuleStr += fmt.Sprintf(";%s", r)
+		}
+	}
+	// 如果存在规则默认优先使用规则
+	if len(upRule) > 0 {
+		// 循环解析规则
+		for k, v := range upRule[0] {
+			setRule(fmt.Sprintf("ctx._source.%s=params.%s", k, v))
+		}
+	} else {
+		for k, _ := range upData {
+			setRule(fmt.Sprintf("ctx._source.%s=params.%s", k, k))
+		}
+	}
+
+	refresh := true
+	g.Dump(g.Map{
+		"query": query,
+		"script": g.Map{
+			"source": upRuleStr,
+			"params": upData,
+		},
+	})
+	_, err := SendRequest(ElasticSearchRequest[esapi.UpdateByQueryRequest]{
+		Request: esapi.UpdateByQueryRequest{
+			Index: []string{index},
+			Body: AnyToIoReader(g.Map{
+				"query": query,
+				"script": g.Map{
+					"source": upRuleStr,
+					"params": upData,
+				},
+			}),
+			Refresh: &refresh,
+		},
+	}.Create())
+
+	return err
 }
