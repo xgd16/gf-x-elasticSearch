@@ -1,4 +1,4 @@
-module gogs.mirlowz.com/x/gf-x-elasticSearch
+module github.com/xgd16/gf-x-elasticSearch
 
 go 1.19
 

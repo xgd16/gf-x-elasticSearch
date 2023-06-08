@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/gogf/gf/v2/frame/g"
-	"gogs.mirlowz.com/x/gf-x-elasticSearch/es"
+	"github.com/xgd16/gf-x-elasticSearch/es"
 	"testing"
 )
 
