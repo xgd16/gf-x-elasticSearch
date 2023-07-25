@@ -1,27 +1,34 @@
 # gf-x-elasticSearch
 ## 基于 GF 的 ES 操作库
 ### 注意事项使用前需要调用 [es.Init](./es/handler.go)
+### 配置方式 直接在 gf 的配置文件中
+```yaml
+es:
+    address: "http://127.0.0.1:9231"
+    username:  ""
+    password: ""
+```
 ### 演示
 ```go
     // 添加
-	_, err = data.SendRequest(data.ElasticSearchRequest[esapi.IndexRequest]{
-		Request: esapi.IndexRequest{
-			Index:      "testx",
-			DocumentID: "861533#######",
-			Refresh:    "true",
-		},
-		Body:         map[string]any{"a": 1, "b": 2, "c": 4},
-		JsonCallBack: data.IndexRequestJsonCallBack,
-	}.Create())
+_, err = data.SendRequest(data.ElasticSearchRequest[esapi.IndexRequest]{
+    Request: esapi.IndexRequest{
+    	Index:      "testx",
+    	DocumentID: "861533#######",
+    	Refresh:    "true",
+    },
+    Body:         map[string]any{"a": 1, "b": 2, "c": 4},
+    JsonCallBack: data.IndexRequestJsonCallBack,
+}.Create())
 	
-	fmt.Println(err) 
+fmt.Println(err) 
 	// 获取
-	data, err := data.SendRequest(data.ElasticSearchRequest[esapi.GetRequest]{
-		Request: esapi.GetRequest{
-			Index:      "testx",
-			DocumentID: "861533#######",
-		},
-	}.Create())
+data, err := data.SendRequest(data.ElasticSearchRequest[esapi.GetRequest]{
+    Request: esapi.GetRequest{
+    	Index:      "testx",
+    	DocumentID: "861533#######",
+    },
+}.Create())
 	
-	fmt.Println(data.MapStrAny(), err)
+fmt.Println(data.MapStrAny(), err)
 ```
